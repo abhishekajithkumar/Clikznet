@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+{% extends 'home.html' %}
+{% block content %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timeline</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+</head>
+<body>
+
+<div class="container midde_cont">
+    <div class="row column_title">
+        <div class="col-md-12">
+            <div class="page_title">
+                <h2>Timeline</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-8">
+            <div class="row justify-content-center">
+                <div class="col-9 p-3 mb-2 bg-white text-dark white_shd full">
+                    <form action="{% url 'post_to_timeline' %}" enctype="multipart/form-data" method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 mb-3">
+                            <input name="username" type="hidden" value="{{request.session.Username}}">
+                            {% for i in data %}
+                            <input name="userid" type="hidden" value="{{i.UserId}}">
+                            {% endfor %}
+                        </div>
+                        <div class="d-grid gap-2 mb-3">
+                            <textarea class="form-control" name="description"
+                                      placeholder="What's on your mind, {{profile.Name}}?"
+                                      rows="2"></textarea>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input class="form-control" id="inputGroupFile02" name="image" type="file" required>
+                            <label class="input-group-text" for="inputGroupFile02">Upload</label>
+                        </div>
+
+                        <div class="d-grid gap-2 mb-3">
+                            <button class="main_bt" type="submit">Post</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+            <!-- end new post layout -->
+
+            {% if post %}
+            {% for i in post reversed %}
+            <div class="row justify-content-center">
+                <div class="col-9 p-3 mb-2 bg-white text-dark white_shd full">
+
+                    <div class="margin_0 border-bottom pb-2">
+                            <div class="row justify-content-start">
+                                <div class="col-2 p-1 ml-3" style="margin-right: -35px;">
+                                    <a href="{% url 'userprofile' dataid=i.UserId_id %}">
+                                        <img alt="#" class="img-responsive rounded-circle" height="50px"
+                                             src="{{i.UserId.DP.url}}" width="50px"/>
+                                    </a>
+                                </div>
+                                <div class="col" style="margin-top: 5px;">
+                                    <p style="color: black; font-weight: bold; font-size: 16px; letter-spacing: 1px; margin-bottom: 0px;">
+                                        <a href="{% url 'userprofile' dataid=i.UserId_id %}" style="color:black;">
+                                            {{i.Username}}
+                                        </a>
+                                    </p>
+                                    <i class="fa fa-clock-o"> {{i.created_at}}</i>
+                                </div>
+
+
+                            </div>
+                    </div>
+
+
+
+                    <div>
+                        <a href="{% url 'view_post' dataid=i.PostId %}">
+                            <div class="pb-2 pt-2">
+                                {{i.Description}}
+                            </div>
+                            <div class="mb-3 text-center" style="object-fit: fill;">
+                                {% if i.PImage %}
+                                <img alt="" src="{{i.PImage.url}}" style="max-width: 100%; height: auto;">
+                                {% endif %}
+                            </div>
+                        </a>
+
+
+                        <!-- Button Bars -->
+                        <div class="border-top pt-2">
+
+                            <div class="px-4 text-center">
+                                <div class="row gx-5">
+
+                                    <div class="col">
+                                        <form id="likeForm" data-postid="{{i.PostId}}">
+                                            {% csrf_token %}
+                                            <input name="postid" type="hidden" value="{{i.PostId}}">
+                                            {% if i.PostId in likes %}
+                                            <button class="fa fa-thumbs-up zoom liked-btn border-0"  type="button"> Like </button>
+                                            {% else %}
+                                            <button class="fa fa-thumbs-o-up zoom like-btn border-0" type="button"> Like </button>
+                                            {% endif %}
+                                            <p class="likes" style="margin-bottom: 0px;">{{ i.no_of_likes }} {% if i.no_of_likes == 1 %}Person Liked{% else %}Likes{% endif %}</p>
+                                        </form>
+
+                                    </div>
+                                    <div class="col">
+                                        <a href="{% url 'view_post' dataid=i.PostId %}">
+                                            <button class="fa fa-comment-o zoom" id="comment-button"
+                                                    style="border: none; font-weight: 900; font-size: bold; width: 200px;">
+                                                Comment
+                                            </button>
+                                        </a>
+                                        <p class="likes" style="margin-bottom: 0px;">
+                                                                    {{ i.no_of_comments }}
+                                                                    {% if i.no_of_comments == 1 %}
+                                                                    Comment
+                                                                    {% else %}
+                                                                    Comments
+                                                                    {% endif %}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+
+            <div class="row justify-content-center text-center" style="margin-bottom: 100px;">
+                <div class="col-9 p-3 mb-2 bg-white text-dark white_shd full pt-4" style="height:90px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
+                      <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4z"/>
+                      <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+                    </svg><br>
+                        No Posts Yet
+                </div>
+            </div>
+
+            {% endif %}
+        </div>
+
+        <div class="col-3">
+            <div class="p-2 white_shd full" style="background-color: #edaa6f;">
+                <div style="border-bottom: 1px solid black;" >
+                    <p class="text-center" style="font-size: 18px; font-weight: 500; color: darkblue;" >Suggestions For You</p>
+                </div>
+
+
+                {% for suggestion in suggestions %}
+                <div class="border-bottom p-2">
+                    <a href="{% url 'userprofile' dataid=suggestion.UserId %}">
+                        <div class="row">
+                            <div class="col-4">
+                                <img alt="#" class="img-responsive rounded-circle" height="50px"
+                                     src="{{suggestion.DP.url}}" width="50px"/>
+                            </div>
+                            <div class="col" style="color: black; font-weight: 500;">
+                                {{ suggestion.Name }}<br>
+                                @{{ suggestion.Username }}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="{% static 'assets/js/buzznet.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+<script>
+    $(document).ready(function() {
+        // AJAX call on like button click
+        $('.like-btn, .liked-btn').click(function(e) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            var postID = form.data('postid');
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'like_post' %}",
+                data: form.serialize(),
+                success: function(data) {
+                    console.log("Successfully liked")
+                    // Update like button text and likes count
+                    var likesCount = data.likes_count;
+                    form.find('.likes').text(likesCount + (likesCount === 1 ? ' Person Liked' : ' Likes'));
+
+                    // Toggle between like and liked buttons
+                    form.find('.like-btn').toggleClass('fa-thumbs-o-up fa-thumbs-up');
+                    form.find('.liked-btn').toggleClass('liked-btn like-btn');
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log('Error:', errorThrown);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+{% if messages %}
+{% for i in messages %}
+{% if i.tags == 'warning' %}
+<script>
+                                swal('{{i}}','','warning');
+
+
+</script>
+{% elif i.tags == 'error' %}
+<script>
+                                swal('{{i}}','','error');
+
+
+</script>
+{% elif i.tags == 'success' %}
+<script>
+                                swal('{{i}}','','success');
+
+
+</script>
+{% else %}
+<script>
+                                swal('{{i}}','','info');
+
+
+</script>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+</body>
+</html>
+{% endblock %}

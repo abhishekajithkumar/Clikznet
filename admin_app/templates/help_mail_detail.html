@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+
+                        <div class="row justify-content-between">
+                            <div class="col-3">
+                                <h6 class="text-white text-capitalize ps-3">Help Center Mail</h6>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="card-body pb-6">
+                    <div class="full inner_elements margin_top_30">
+
+                        <div class="row justify-content-center">
+
+                            <div class="col-4">
+                                {% if mail.UserId_id %}
+                                <a href="{% url 'user_profile' dataid=mail.UserId_id %}">
+                                    <img alt="user1"
+                                         class="avatar me-3 border-radius-lg" src="{{mail.UserId.DP.url}}"
+                                         style="height:70px; width:70px;">
+                                    {{mail.UserId.Username}}</a>
+                                {% else %}
+                                <img alt="user1"
+                                     class="avatar me-3 border-radius-lg" src="{% static 'asset/img/default.jpg' %}"
+                                     style="height:70px; width:70px;">
+                                Clikznet User
+                                {% endif %}
+                            </div>
+
+                            <div class="col-4">
+                                <b style="font-size:14px;">Name :</b> {{mail.Name}}<br>
+                                <b style="font-size:14px;">Email :</b> {{mail.Email}}
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <div class="row justify-content-center">
+                            <div class="col-8">
+                                <b style="font-size:14px;">Issue :</b><br>
+                                <input class="form-control p-2" id="" name="" readonly type="text"
+                                       value="{{mail.Issue}}">
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center">
+                            <div class="col-8">
+                                <b style="font-size:14px;">Details :</b><br>
+                                <textarea class="form-control p-2" cols="30" name="" readonly
+                                          rows="4">{{mail.Details}}</textarea>
+                            </div>
+                        </div>
+                        <br>
+
+<form method="post" action="{% url 'help_mail_review' %}">
+                                {% csrf_token %}
+                        <div class="row justify-content-center">
+
+
+
+
+                            <div class="col-6">
+                                <input type="hidden" value="{{mail.id}}" name="mail_id">
+                                <b style="font-size:14px;">Mail Comment :</b>
+                                <textarea class="form-control p-2" cols="30" name="comment" placeholder="Add comment.."
+                                          rows="4" style="background-color:#FFF4D0;" required>{{mail.MailComment}}</textarea>
+                            </div>
+
+                            <div class="col-2">
+                                <b style="font-size:14px;">Mail Status :</b>
+                                <select aria-label="Default select example" class="form-select p-2" name="status"
+                                        style="background-color:#FFF4D0;">
+                                    <option selected style="font-weight:bold;" value="{{mail.MailStatus}}">
+                                        {% if mail.MailStatus == 0 %}
+                                        Waiting for Response
+                                        {% elif mail.MailStatus == 1 %}
+                                        On Hold
+                                        {% elif mail.MailStatus %}
+                                        Closed
+                                        {% endif %}
+                                    </option>
+
+                                    <option value="0">Waiting for Response</option>
+                                    <option value="1">On Hold</option>
+                                    <option value="2">Closed</option>
+                                </select><br>
+
+                                <button type="submit" class="form-control btn btn-success">Submit</button>
+                            </div>
+
+
+                        </div>
+ </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+{% if messages %}
+{% for i in messages %}
+{% if i.tags == 'warning' %}
+<script>
+                swal('{{i}}','','warning');
+
+
+
+
+
+
+</script>
+{% elif i.tags == 'error' %}
+<script>
+                swal('{{i}}','','error');
+
+
+
+
+
+
+</script>
+{% elif i.tags == 'success' %}
+<script>
+                swal('{{i}}','','success');
+
+
+
+
+
+
+</script>
+{% else %}
+<script>
+                swal('{{i}}','','info');
+
+
+
+
+
+
+</script>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="row g-0 each-post">
+    <div class="col-sm-8 col-md-8 border post-image-section p-0">
+        {% if post.PImage %}
+        <img alt="#" src="{{post.PImage.url}}" style="object-fit: contain; width:100%; height:100%;">
+        {% endif %}
+
+    </div>
+    <div class="col-3 col-md-4 border pr-0">
+        <div class="scrollable_comment">
+            <div class="margin_0 border-bottom pb-2" style="padding: 0px 0px 0px 15px;">
+
+                    <div class="row justify-content-start">
+                        <div class="col-2 p-1 ml-3">
+                            <a href="{% url 'user_profile' dataid=post.UserId_id %}">
+                            <img alt="#" class="img-responsive rounded-circle" height="50px"
+                                 src="{{post.UserId.DP.url}}" width="50px"/>
+                            </a>
+                        </div>
+                        <div class="col" style="padding-top: 10px;">
+                            {% if post.UserId_id == profile.UserId %}
+                            <a href="{% url 'my_profile' %}">
+                                <b style="color: #ff5722; font-weight: 600;">{{post.Username}}</b><br>
+                            </a>
+                            {% else %}
+                            <a href="{% url 'user_profile' dataid=post.UserId_id %}">
+                                <b style="color: #ff5722; font-weight: 600; font-size: 16px;">{{post.Username}}</b><br>
+                            </a>
+                            {% endif %}
+
+                            <i class="fa fa-clock-o" style="font-size: 14px;"> {{post.created_at}}</i>
+
+                        </div>
+                        <div class="col-2">
+                            <button class="fa fa-close back-btn" onclick="goBack()"></button><br>
+
+                            <a class="delete-post" href="{% url 'delete_post' post_id=post.PostId %}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red" class="bi bi-trash3" viewBox="0 0 16 16">
+                                  <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="pb-2 pt-2 border-bottom" style="padding: 0px 15px 0px 15px;">
+
+                {{post.Description}}<br><br>
+
+                <div class="row">
+                <div class="col text-start fa fa-thumbs-up ml-2">
+                    {{post.no_of_likes}}
+                </div>
+                <div class="col text-end">
+                  {{post.no_of_comments}}
+                    <a class="fa fa-comment mr-2"> </a>
+                </div>
+              </div>
+            </div>
+
+
+            <div>
+                {% for cmnt in comments %}
+                <div class="row each-comment">
+                    <div class="col-3 pr-0">
+                        <img alt="#" class="img-responsive rounded-circle" height="50px" src="{{cmnt.UserId.DP.url}}"
+                             width="50px"/>
+                    </div>
+                    <div class="col" style="margin-left: -25px;">
+                        {% if cmnt.UserId_id == profile.UserId %}
+                        <a href="{% url 'my_profile' %}">
+                            <div style="font-weight: 600; color: #ff5722;">
+                                {{cmnt.UserId.Username}}
+                            </div>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'userprofile' dataid=cmnt.UserId_id %}">
+                            <div style="font-weight: 600; color: #ff5722;">
+                                {{cmnt.UserId.Username}}
+                            </div>
+                        </a>
+                        {% endif %}
+
+                        {{cmnt.Comment}}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    document.querySelectorAll('.delete-post').forEach(button => {
+    button.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default action (i.e., following the link)
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete Post"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If confirmed, proceed with the deletion by following the link
+                window.location.href = button.getAttribute('href');
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>
+{% endblock %}

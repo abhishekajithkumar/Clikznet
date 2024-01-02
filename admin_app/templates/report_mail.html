@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        a{
+            text-decoration: none !important;
+            color: black !important;
+        }
+        .list-row:hover a{
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+
+                        <div class="row justify-content-between">
+                            <div class="col-3">
+                                <h6 class="text-white text-capitalize ps-3">Reported Mails</h6>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="card-body pb-2">
+                    <div class="full inner_elements margin_top_30">
+                        <div class="tab_style2">
+                            <div class="tabbar">
+
+                                <nav>
+                                    <div class="row nav nav-tabs" id="nav-tab" role="tablist">
+                                        <a aria-selected="false" class="col nav-item nav-link" data-toggle="tab"
+                                           href="#all_mail" id="nav-all-tab" role="tab"><strong>All</strong></a>
+
+                                        <a aria-selected="true" class=" col nav-item nav-link active" data-toggle="tab"
+                                           href="#ongoing_mail" id="nav-ongoing-tab" role="tab"><strong>
+                                            Ongoing </strong></a>
+
+                                        <a aria-selected="true" class=" col nav-item nav-link" data-toggle="tab"
+                                           href="#pending_mail" id="nav-pending-tab" role="tab"><strong>
+                                            Pending </strong></a>
+
+                                        <a aria-selected="false" class="col nav-item nav-link" data-toggle="tab"
+                                           href="#closed_mail" id="nav-closed-tab" role="tab"><strong>
+                                            Closed </strong></a>
+                                    </div>
+                                </nav>
+
+                                <div class="tab-content" id="nav-tabContent">
+
+                                    <div aria-labelledby="nav-all-tab" class="tab-pane fade" id="all_mail"
+                                         role="tabpanel">
+                                        <div class="msg_list_main">
+                                            <div>
+                                                <div class="row p-2" style="border-bottom: 1px solid grey;">
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Profile</b>
+                                                    </div>
+
+                                                    <div class="col-1">
+                                                        <b style="font-size:14px;">Post</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Account Status</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Reported by</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Reason</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Report Status</b>
+                                                    </div>
+
+                                                     <div class="col-1">
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                    {% for i in mail %}
+                                                        <div class="row p-2 list-row align-items-center">
+
+                                                            <div class="col">
+                                                                <a href="{% url 'user_profile' dataid=i.PostId.UserId_id %}">
+                                                                <img alt="user1"
+                                                                     class="avatar me-3 border-radius-lg" style="height:70px; width:70px;"
+                                                                     src="{{i.PostId.UserId.DP.url}}">
+                                                                {{i.PostId.Username}}</a>
+                                                            </div>
+
+                                                            <div class="col-1">
+                                                                <a href="{% url 'view_each_post' dataid=i.PostId_id %}">
+                                                                <img alt="user1"
+                                                                     class="me-3 border-radius-lg" style="height:70px; width:70px;"
+                                                                     src="{{i.PostId.PImage.url}}">
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="col">
+                                                                {% if i.PostId.UserId.Status == 0 %}
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                                                  <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+                                                                  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                                                                </svg>
+                                                                Active
+                                                                {% else %}
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-ban" viewBox="0 0 16 16">
+                                                                  <path d="M15 8a6.973 6.973 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0"/>
+                                                                </svg>
+                                                                Disabled
+                                                                {% endif %}
+                                                            </div>
+
+                                                            <div class="col">
+                                                                <a href="{% url 'user_profile' dataid=i.UserId_id %}">
+                                                                <img alt="user1"
+                                                                     class="avatar me-3 border-radius-lg" style="height:70px; width:70px;"
+                                                                     src="{{i.UserId.DP.url}}">
+                                                                {{i.UserId.Username}}</a>
+                                                            </div>
+
+                                                            <div class="col">
+                                                                <a>{{i.Reason}}</a>
+                                                            </div>
+
+                                                            <div class="col">
+                                                                {% if i.ReportStatus == 0 %}
+                                                                    Ongoing
+                                                                {% elif i.ReportStatus == 1 %}
+                                                                    Pending
+                                                                {% else %}
+                                                                    Closed
+                                                                {% endif %}
+                                                            </div>
+
+                                                            <div class="col-1">
+                                                                <a href="{% url 'report_detail' dataid=i.id %}">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                                                      <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                                                      <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                                                    </svg>
+                                                                </a>
+                                                            </div>
+
+
+                                                        </div>
+                                                    {% endfor %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div aria-labelledby="nav-ongoing-tab" class="tab-pane fade show active" id="ongoing_mail"
+                                         role="tabpanel">
+                                        <div class="msg_list_main">
+                                            <div>
+                                                <div class="row p-2" style="border-bottom: 1px solid grey;">
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Profile</b>
+                                                    </div>
+
+                                                    <div class="col-1">
+                                                        <b style="font-size:14px;">Post</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Account Status</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Reported by</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Reason</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Report Status</b>
+                                                    </div>
+
+                                                     <div class="col-1">
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                    {% for i in ongoing %}
+                                                        <div class="row p-2 list-row align-items-center">
+
+                                                            <div class="col">
+                                                                <a href="{% url 'user_profile' dataid=i.PostId.UserId_id %}">
+                                                                <img alt="user1"
+                                                                     class="avatar me-3 border-radius-lg" style="height:70px; width:70px;"
+                                                                     src="{{i.PostId.UserId.DP.url}}">
+                                                                {{i.PostId.Username}}</a>
+                                                            </div>
+
+                                                            <div class="col-1">
+                                                                <a href="{% url 'view_each_post' dataid=i.PostId_id %}">
+                                                                <img alt="user1"
+                                                                     class="me-3 border-radius-lg" style="height:70px; width:70px;"
+                                                                     src="{{i.PostId.PImage.url}}">
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="col">
+                                                                {% if i.PostId.UserId.Status == 0 %}
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                                                  <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+                                                                  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                                                                </svg>
+                                                                Active
+                                                                {% else %}
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-ban" viewBox="0 0 16 16">
+                                                                  <path d="M15 8a6.973 6.973 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0"/>
+                                                                </svg>
+                                                                Disabled
+                                                                {% endif %}
+                                                            </div>
+
+                                                            <div class="col">
+                                                                <a href="{% url 'user_profile' dataid=i.UserId_id %}">
+                                                                <img alt="user1"
+                                                                     class="avatar me-3 border-radius-lg" style="height:70px; width:70px;"
+                                                                     src="{{i.UserId.DP.url}}">
+                                                                {{i.UserId.Username}}</a>
+                                                            </div>
+
+                                                            <div class="col">
+                                                                <a>{{i.Reason}}</a>
+                                                            </div>
+
+                                                            <div class="col">
+                                                                {% if i.ReportStatus == 0 %}
+                                                                    Ongoing
+                                                                {% elif i.ReportStatus == 1 %}
+                                                                    Pending
+                                                                {% else %}
+                                                                    Closed
+                                                                {% endif %}
+                                                            </div>
+
+                                                            <div class="col-1">
+                                                                <a href="{% url 'report_detail' dataid=i.id %}">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                                                      <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                                                      <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                                                    </svg>
+                                                                </a>
+                                                            </div>
+
+
+                                                        </div>
+                                                    {% endfor %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div aria-labelledby="nav-pending-tab" class="tab-pane fade" id="pending_mail"
+                                         role="tabpanel">
+                                        <div class="msg_list_main">
+                                            <div>
+                                                <div class="row p-2" style="border-bottom: 1px solid grey;">
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Profile</b>
+                                                    </div>
+
+                                                    <div class="col-1">
+                                                        <b style="font-size:14px;">Post</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Account Status</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Reported by</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Reason</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Report Status</b>
+                                                    </div>
+
+                                                     <div class="col-1">
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                    {% for i in pending %}
+                                                        <div class="row p-2 list-row align-items-center">
+
+                                                            <div class="col">
+                                                                <a href="{% url 'user_profile' dataid=i.PostId.UserId_id %}">
+                                                                <img alt="user1"
+                                                                     class="avatar me-3 border-radius-lg" style="height:70px; width:70px;"
+                                                                     src="{{i.PostId.UserId.DP.url}}">
+                                                                {{i.PostId.Username}}</a>
+                                                            </div>
+
+                                                            <div class="col-1">
+                                                                <a href="{% url 'view_each_post' dataid=i.PostId_id %}">
+                                                                <img alt="user1"
+                                                                     class="me-3 border-radius-lg" style="height:70px; width:70px;"
+                                                                     src="{{i.PostId.PImage.url}}">
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="col">
+                                                                {% if i.PostId.UserId.Status == 0 %}
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                                                  <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+                                                                  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                                                                </svg>
+                                                                Active
+                                                                {% else %}
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-ban" viewBox="0 0 16 16">
+                                                                  <path d="M15 8a6.973 6.973 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0"/>
+                                                                </svg>
+                                                                Disabled
+                                                                {% endif %}
+                                                            </div>
+
+                                                            <div class="col">
+                                                                <a href="{% url 'user_profile' dataid=i.UserId_id %}">
+                                                                <img alt="user1"
+                                                                     class="avatar me-3 border-radius-lg" style="height:70px; width:70px;"
+                                                                     src="{{i.UserId.DP.url}}">
+                                                                {{i.UserId.Username}}</a>
+                                                            </div>
+
+                                                            <div class="col">
+                                                                <a>{{i.Reason}}</a>
+                                                            </div>
+
+                                                            <div class="col">
+                                                                {% if i.ReportStatus == 0 %}
+                                                                    Ongoing
+                                                                {% elif i.ReportStatus == 1 %}
+                                                                    Pending
+                                                                {% else %}
+                                                                    Closed
+                                                                {% endif %}
+                                                            </div>
+
+                                                            <div class="col-1">
+                                                                <a href="{% url 'report_detail' dataid=i.id %}">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                                                      <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                                                      <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                                                    </svg>
+                                                                </a>
+                                                            </div>
+
+
+                                                        </div>
+                                                    {% endfor %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div aria-labelledby="nav-closed-tab" class="tab-pane fade" id="closed_mail"
+                                         role="tabpanel">
+                                        <div class="msg_list_main">
+                                            <div>
+                                                <div class="row p-2" style="border-bottom: 1px solid grey;">
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Profile</b>
+                                                    </div>
+
+                                                    <div class="col-1">
+                                                        <b style="font-size:14px;">Post</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Account Status</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Reported by</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Reason</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Report Status</b>
+                                                    </div>
+
+                                                     <div class="col-1">
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                    {% for i in closed %}
+                                                        <div class="row p-2 list-row align-items-center">
+
+                                                            <div class="col">
+                                                                <a href="{% url 'user_profile' dataid=i.PostId.UserId_id %}">
+                                                                <img alt="user1"
+                                                                     class="avatar me-3 border-radius-lg" style="height:70px; width:70px;"
+                                                                     src="{{i.PostId.UserId.DP.url}}">
+                                                                {{i.PostId.Username}}</a>
+                                                            </div>
+
+                                                            <div class="col-1">
+                                                                <a href="{% url 'view_each_post' dataid=i.PostId_id %}">
+                                                                <img alt="user1"
+                                                                     class="me-3 border-radius-lg" style="height:70px; width:70px;"
+                                                                     src="{{i.PostId.PImage.url}}">
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="col">
+                                                                {% if i.PostId.UserId.Status == 0 %}
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                                                  <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+                                                                  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                                                                </svg>
+                                                                Active
+                                                                {% else %}
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-ban" viewBox="0 0 16 16">
+                                                                  <path d="M15 8a6.973 6.973 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0"/>
+                                                                </svg>
+                                                                Disabled
+                                                                {% endif %}
+                                                            </div>
+
+                                                            <div class="col">
+                                                                <a href="{% url 'user_profile' dataid=i.UserId_id %}">
+                                                                <img alt="user1"
+                                                                     class="avatar me-3 border-radius-lg" style="height:70px; width:70px;"
+                                                                     src="{{i.UserId.DP.url}}">
+                                                                {{i.UserId.Username}}</a>
+                                                            </div>
+
+                                                            <div class="col">
+                                                                <a>{{i.Reason}}</a>
+                                                            </div>
+
+                                                            <div class="col">
+                                                                {% if i.ReportStatus == 0 %}
+                                                                    Ongoing
+                                                                {% elif i.ReportStatus == 1 %}
+                                                                    Pending
+                                                                {% else %}
+                                                                    Closed
+                                                                {% endif %}
+                                                            </div>
+
+                                                            <div class="col-1">
+                                                                <a href="{% url 'report_detail' dataid=i.id %}">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                                                      <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                                                      <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                                                    </svg>
+                                                                </a>
+                                                            </div>
+
+
+                                                        </div>
+                                                    {% endfor %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+{% if messages %}
+{% for i in messages %}
+{% if i.tags == 'warning' %}
+<script>
+                swal('{{i}}','','warning');
+
+
+
+</script>
+{% elif i.tags == 'error' %}
+<script>
+                swal('{{i}}','','error');
+
+
+
+</script>
+{% elif i.tags == 'success' %}
+<script>
+                swal('{{i}}','','success');
+
+
+
+</script>
+{% else %}
+<script>
+                swal('{{i}}','','info');
+
+
+
+</script>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+</body>
+</html>
+{% endblock %}

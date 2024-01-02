@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+
+                        <div class="row justify-content-between">
+                            <div class="col-3">
+                                <h6 class="text-white text-capitalize ps-3">Report detail</h6>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="card-body pb-6">
+                    <div class="full inner_elements margin_top_30">
+
+                        <div class="row">
+                            <div class="col">
+                                <div style="display: flex; justify-content: center; align-items: center;">
+                                    <div class="card-post" style="width:500px; height:500px; background-color: black;">
+                                        <a class="card-image"
+                                           href="{% url 'view_each_post' dataid=details.PostId_id %}">
+                                            <img alt="#" class="card-image" src="{{ details.PostId.PImage.url }}"
+                                                 style="object-fit: contain; width:100%; height:100%;">
+                                        </a>
+                                        <div class="hide">
+
+                                            <div class="user-hidden text-center">
+                                                <img alt="#" class="img-responsive rounded-circle" height="50px"
+                                                     src="{{details.PostId.UserId.DP.url}}" width="50px"/>
+                                                <p style="font-size: 1.5em; font-weight: bold;">
+                                                    {{details.PostId.UserId.Username}}</p>
+                                            </div>
+
+                                            <div class="like-hidden">
+                                                <p style="font-size: 1.5em; font-weight: bold;">
+                                                    {{details.PostId.no_of_likes}}
+                                                    <i
+                                                            class="fa fa-thumbs-up"></i></p>
+                                            </div>
+
+                                            <div class="comment-hidden">
+                                                <p style="font-size: 1.5em; font-weight: bold;"><i
+                                                        class="fa fa-comment"></i>
+                                                    {{details.PostId.no_of_comments}}</p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col">
+                                <h4>Reported By:</h4>
+
+                                <div style="overflow:scroll; height:300px; overflow-x: hidden; border-bottom: 1px solid black;">
+                                    {% for report in reports %}
+                                    <div class="p-1 m-2" style="border: 1px solid black;">
+                                        <div class="row">
+
+                                            <div class="col-1">
+                                                <img alt="user1" class="avatar avatar-sm me-3 border-radius-lg"
+                                                     src="{{report.UserId.DP.url}}">
+                                            </div>
+
+                                            <div class="col">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        {{report.UserId.Username}}
+                                                    </div>
+                                                    <div class="col text-end">
+                                                        <svg class="bi bi-calendar-week" fill="currentColor" height="16"
+                                                             viewBox="0 0 16 16" width="16"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                                                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                                                        </svg>
+                                                        {{report.created_at}}
+                                                    </div>
+                                                </div>
+                                                <textarea class="form-control p-2" cols="30" rows="2" readonly>{{report.Reason}}</textarea>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+
+                                </div>
+
+                                <form method="post" action="{% url 'report_review' %}">
+                                    {% csrf_token %}
+                                    <div class="row m-3">
+                                        <input type="hidden" name="report_id" value="{{ details.id }}">
+                                        <div class="col">
+                                            <textarea class="form-control" name="comment" placeholder="Review Comment**"
+                                                      rows="2"
+                                                      style="border: 1px solid black; background-color:#FFF4D0;" required>{{details.ReviewComment}}</textarea>
+                                        </div>
+                                        <div class="col-4">
+                                            <select aria-label="Default select example" class="form-select" name="status"
+                                                    style="border: 1px solid black; height:57.6px; background-color:#FFF4D0;">
+                                                <option value="{{details.ReportStatus}}" selected style="font-weight:bold;">
+                                                    {% if details.ReportStatus == 0 %}
+                                                        Ongoing
+                                                    {% elif details.ReportStatus == 1 %}
+                                                        Pending
+                                                    {% else %}
+                                                        Closed
+                                                    {% endif %}
+                                                </option>
+
+                                                <option value="0">Ongoing</option>
+                                                <option value="1">Pending</option>
+                                                <option value="2">Closed</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row m-3">
+                                        <div class="col">
+                                        </div>
+                                        <div class="col-4">
+                                            <button type="submit" style="width: 165px; height:57.6px; font-size: 14px;" class="btn btn-success">Save</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+{% if messages %}
+{% for i in messages %}
+{% if i.tags == 'warning' %}
+<script>
+                swal('{{i}}','','warning');
+
+
+
+
+
+</script>
+{% elif i.tags == 'error' %}
+<script>
+                swal('{{i}}','','error');
+
+
+
+
+
+</script>
+{% elif i.tags == 'success' %}
+<script>
+                swal('{{i}}','','success');
+
+
+
+
+
+</script>
+{% else %}
+<script>
+                swal('{{i}}','','info');
+
+
+
+
+
+</script>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Register - Clikznet</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+      <link rel="icon" href="{% static 'assets/images/logo/clikznet-logo.png' %}" type="image/png" />
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'login/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'login/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'login/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'login/css/style.css' %}" rel="stylesheet">
+
+     <style>
+         .password-input {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div>
+                <img class="img-responsive" width="180px" src="{% static 'assets/images/logo/clikznet.png' %}" alt="#"/>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sign Up Start -->
+        <div class="container-fluid">
+            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                    <div class="bg-secondary rounded p-2 p-sm-5 my-4 mx-3">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <a href="index.html" class="">
+                                <div class="text-primary logo_section me-2">
+                                    <img class="img-responsive" width="180px" src="{% static 'assets/images/logo/clikznet.png' %}" alt="#"/>
+                                </div>
+                            </a>
+                            <h3>Sign Up</h3>
+                        </div>
+                        <form method="post" action="{% url 'save_register' %}">
+							{% csrf_token %}
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingText1" placeholder="Name" name="name" required>
+                                <label for="floatingText1">Full Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingText" placeholder="username" name="username" required>
+                                <label for="floatingText">Username</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="floatingInput" placeholder="email" name="email" required>
+                                <label for="floatingInput">Email address</label>
+                            </div>
+                           <div class="form-floating password-input">
+                                <input type="password" class="form-control" id="floatingPassword" placeholder="password" name="password"  required oninput="checkPasswordStrength(this.value)">
+                               <span class="toggle-password" onclick="togglePasswordVisibility('floatingPassword')">Show</span>
+                                <label for="floatingPassword">Password</label>
+                            </div>
+                            <div class="mb-4">
+                                <small id="passwordStrength" class="form-text text-info"></small>
+                            </div>
+                            <div class="form-floating password-input">
+                                <input type="password" class="form-control" id="floatingPassword2" placeholder="confirmPassword" name="confirmPassword"  required oninput="checkConfirmPassword(this.value)">
+                               <span class="toggle-password" onclick="togglePasswordVisibility('floatingPassword2')">Show</span>
+                                <label for="floatingPassword2">Confirm Password</label>
+                            </div>
+                            <div class="mb-4">
+                                <small id="confirmPasswordText" class="form-text text-info"></small>
+                            </div>
+
+
+                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
+                        </form>
+                        <p class="text-center mb-0">Already have an Account? <a href="{% url 'login' %}">Sign In</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Sign Up End -->
+    </div>
+
+
+       <script>
+        function togglePasswordVisibility(inputId) {
+    var passwordField = document.getElementById(inputId);
+    var toggleButton = document.querySelector(`#${inputId} + .toggle-password`);
+
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        toggleButton.textContent = 'Hide';
+    } else {
+        passwordField.type = 'password';
+        toggleButton.textContent = 'Show';
+    }
+}
+
+    </script>
+
+    <script>
+    function checkPasswordStrength(password) {
+        var strengthBadge = document.getElementById('passwordStrength');
+
+        if (password.match(/[A-Z]+/)) {
+            if (password.match(/[a-z]+/)) {
+                if (password.match(/[0-9]+/)) {
+                    if (password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/)) {
+                        if (password.length >= 8) {
+                            strengthBadge.innerText = 'Good job! Your password meets requirements';
+                        }
+                        else{
+                            strengthBadge.innerText = 'Password must be at least 8 characters long';
+                        }
+                    }
+                    else{
+                        strengthBadge.innerText = 'Password must contain at least one special character';
+                    }
+                }
+                else{
+                    strengthBadge.innerText = 'Password must contain at least one number';
+                }
+            }
+            else{
+                strengthBadge.innerText = 'Password must contain at least one lowercase letter';
+            }
+        }
+        else{
+            strengthBadge.innerText = 'Password must contain at least one uppercase letter';
+        }
+    }
+</script>
+
+    <script>
+    function checkConfirmPassword(confirmPassword) {
+        var confirmBadge = document.getElementById('confirmPassword');
+        var password = document.getElementById('floatingPassword').value;
+
+        if (password === confirmPassword) {
+            confirmPasswordText.innerText = 'Password matched!';
+        }
+        else {
+            confirmPasswordText.innerText = 'Password do not match!';
+        }
+    }
+
+</script>
+
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        {% if messages %}
+            {% for i in messages %}
+                {% if i.tags == 'warning' %}
+                    <script>
+                        swal('{{i}}','','warning');
+                    </script>
+                {% elif i.tags == 'error' %}
+                    <script>
+                        swal('{{i}}','','error');
+                    </script>
+                {% elif i.tags == 'success' %}
+                    <script>
+                        swal('{{i}}','','success');
+                    </script>
+                {% else %}
+                    <script>
+                        swal('{{i}}','','info');
+                    </script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'login/lib/chart/chart.min.js' %}"></script>
+    <script src="{% static 'login/lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'login/lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'login/lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'login/lib/tempusdominus/js/moment.min.js' %}"></script>
+    <script src="{% static 'login/lib/tempusdominus/js/moment-timezone.min.js' %}"></script>
+    <script src="{% static 'login/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'login/js/main.js' %}"></script>
+</body>
+
+</html>

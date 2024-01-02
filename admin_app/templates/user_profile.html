@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for i in user %}
+        <div class="row justify-content-center">
+            <div class="col-8 p-3 mb-2 bg-white text-dark white_shd full">
+               <div class="white_shd full margin_bottom_30">
+                  <div class="full graph_head">
+                     <div class="heading1 margin_0">
+<!--                        <h2>{{i.Username}}</h2>-->
+                     </div>
+                  </div>
+               </div>
+
+               <div class="row">
+                   <div class="col-4">
+                      <div class="profile_img">
+                          <img width="180" height="180" class="rounded-circle" src="{{i.DP.url}}" alt="#" />
+                      </div>
+                   </div>
+
+                   <div class="col">
+
+                       <div class="row">
+                           <div class="col">
+                              <div class="contact_inner">
+                                 <h3>{{i.Name}}</h3>
+                                 <p><strong>Username: </strong>{{i.Username}}</p>
+                                 <ul class="list-unstyled">
+                                    <li><i class="fa fa-envelope-o"></i> : {{i.Email}}</li>
+                                 </ul><br><br>
+                              </div>
+                           </div>
+
+                       </div>
+                       <div class="row">
+                           <div class="col contact_inner">
+                               <p><strong>{{followers_count}}  Followers </strong></p>
+                           </div>
+                           <div class="col contact_inner">
+                               <p><strong>{{following_count}}  Following </strong></p>
+                           </div>
+                       </div>
+
+                   </div>
+                    <div class="col-2" style="margin-top:20px;">
+                        <form action="{% url 'account_status' %}" method="post">
+                            {% csrf_token %}
+                            <input name="userid" type="hidden" value="{{i.UserId}}">
+                            {% if i.Status == 0 %}
+                                <button type="submit" class="btn btn-outline-success">
+                                        Active
+                                </button>
+                            {% else %}
+                                <button type="submit" class="btn btn-outline-danger">
+                                    Disabled
+                                </button>
+                            {% endif %}
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+         </div>
+{% endfor %}
+
+<div class="row mt-3">
+
+                    {% for p in post reversed%}
+                    <div class="col mb-3" style="display: flex; justify-content: center; align-items: center;">
+                        <div class="card-post" style="width:326px; height:326px; background-color: black;">
+                            <a class="card-image" href="{% url 'view_each_post' dataid=p.PostId %}">
+                                <img class="card-image" alt="#" src="{{ p.PImage.url }}"
+                                     style="object-fit: contain; width:100%; height:100%;">
+                            </a>
+                            <div class="hide">
+
+                                <div class="user-hidden text-center">
+                                    <img alt="#" class="img-responsive rounded-circle" height="50px"
+                                         src="{{p.UserId.DP.url}}" width="50px"/>
+                                    <p style="font-size: 1.5em; font-weight: bold;">{{p.UserId.Username}}</p>
+                                </div>
+
+                                <div class="like-hidden">
+                                    <p style="font-size: 1.5em; font-weight: bold;">{{p.no_of_likes}} <i
+                                            class="fa fa-thumbs-up"></i></p>
+                                </div>
+
+                                <div class="comment-hidden">
+                                    <p style="font-size: 1.5em; font-weight: bold;"><i class="fa fa-comment"></i>
+                                        {{p.no_of_comments}}</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+</body>
+</html>
+{% endblock %}

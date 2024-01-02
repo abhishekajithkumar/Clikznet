@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% extends 'home.html' %}
+{% block content %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="container">
+
+        <div class="row justify-content-center pt-2" style="margin-top:100px; margin-bottom:200px;">
+            <div class="col-4 p-3 mb-2 bg-white text-dark white_shd full">
+                <div class="white_shd full margin_bottom_30">
+                    <div class="full graph_head">
+                        <div class="text-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="red" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                            </svg>
+                            <h4>Your account has been disabled</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="margin_0 border-bottom pb-2">
+                    <a>For more information, or if you think your account was disabled by mistake, please visit the Help Center.</a>
+                </div>
+                <div class="text-center pt-2">
+                    <a href="{% url 'help_center' %}">
+                        <h6>Go To Help Center</h6>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+</body>
+</html>
+{% endblock %}
+

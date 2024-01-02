@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+{% extends 'home.html' %}
+{% block content %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile</title>
+</head>
+<body>
+
+<div class="container midde_cont">
+
+    <div class="row column_title">
+        <div class="col-md-12">
+            <div class="page_title">
+                <h2>User Profile</h2>
+            </div>
+        </div>
+    </div>
+
+        {% for i in user %}
+         <div class="row justify-content-center margin_bottom_30">
+            <div class="col-8 p-3 mb-2 bg-white text-dark white_shd full" style="box-shadow: 2px 5px 10px 10px lightblue;">
+
+
+               <div class="row">
+                   <div class="col-3 ml-5">
+                      <div class="profile_img">
+                          <img width="180" height="180" class="rounded-circle" src="{{i.DP.url}}" alt="#" />
+                      </div>
+                   </div>
+
+                   <div class="col">
+                       <div class="row">
+                           <div class="col ml-5">
+                              <div class="contact_inner">
+                                 <h3>{{i.Name}}</h3>
+                                 <p><strong>Username: </strong>{{i.Username}}</p>
+                              </div>
+                           </div>
+                           <div class="col-5">
+                               <div class="button_block">
+
+                                   <form method="post" action="{% url 'follow' %}">
+                                       {% csrf_token %}
+
+                                       <input type="hidden" name="follower" value="{{request.session.userid}}">
+                                       <input type="hidden" name="following" value="{{i.UserId}}">
+
+                                       <button type="submit" class="main_bt" style="color: white;">
+                                             <i class="fa fa-user"></i>
+                                            <a style="color: white;">{{button_text}}</a>
+                                       </button>
+                                   </form>
+
+                              </div>
+                           </div>
+                       </div>
+                       <div class="row mt-5">
+                           <div class="col-4 contact_inner mt-3 text-center">
+                               <p style="font-size: 16px; font-weight:600;">{{followers_count}}</p>
+                               <p style="font-size: 16px; font-weight:600;">Followers</p>
+                           </div>
+                           <div class="col-4 contact_inner mt-3 text-center">
+                               <p style="font-size: 16px; font-weight:600;">{{following_count}}</p>
+                               <p style="font-size: 16px; font-weight:600;">Following</p>
+                           </div>
+                       </div>
+
+                   </div>
+                </div>
+            </div>
+         </div>
+         {% endfor %}
+
+    {% if post %}
+        {% for i in post reversed %}
+          <div class="row justify-content-center">
+            <div class="col-6 p-3 mb-2 bg-white text-dark white_shd full">
+
+                <div class="margin_0 border-bottom pb-2">
+                    <div class="row justify-content-start">
+                        <div class="col-1 p-1 ml-3">
+                            <a href="{% url 'userprofile' dataid=i.UserId_id %}">
+                                <img class="img-responsive rounded-circle" src="{{i.UserId.DP.url}}" width="50px" alt="#" />
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="{% url 'userprofile' dataid=i.UserId_id %}">
+                                <i style="color: black; font-weight: bold; font-size: 16px; letter-spacing: 1px;">{{i.UserId.Username}}</i>
+                            </a><br>
+                            <i class="fa fa-clock-o"> {{i.created_at}}</i>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <a href="{% url 'view_post' dataid=i.PostId %}">
+                        <div class="pb-2 pt-2">
+                            {{i.Description}}
+                        </div>
+                        <div style="object-fit: fill;" class="mb-3 text-center">
+                            {% if i.PImage %}
+                            <img src="{{i.PImage.url}}" alt="" style="max-width: 100%; height: auto;">
+                            {% endif %}
+                        </div>
+                    </a>
+
+                    <!-- Button Bars -->
+                    <div class="border-top pt-2">
+
+                            <div class="px-4 text-center">
+                                <div class="row gx-5">
+
+                                    <div class="col" >
+                                        <form id="likeForm" data-postid="{{i.PostId}}">
+                                            {% csrf_token %}
+                                            <input name="postid" type="hidden" value="{{i.PostId}}">
+                                            {% if i.PostId in likes %}
+                                            <button class="fa fa-thumbs-up zoom liked-btn border-0"  type="button"> Like </button>
+                                            {% else %}
+                                            <button class="fa fa-thumbs-o-up zoom like-btn border-0" type="button"> Like </button>
+                                            {% endif %}
+                                            <p class="likes" style="margin-bottom: 0px;">{{ i.no_of_likes }} {% if i.no_of_likes == 1 %}Person Liked{% else %}Likes{% endif %}</p>
+                                        </form>
+
+                                    </div>
+                                    <div class="col">
+                                        <a href="{% url 'view_post' dataid=i.PostId %}">
+                                            <button id="comment-button" class="fa fa-comment-o zoom" style="border: none; font-weight: 900; font-size: bold; width: 200px;"> Comment</button>
+                                        </a>
+                                        <p class="likes" style="margin-bottom: 0px;">
+                                                                    {{ i.no_of_comments }}
+                                                                    {% if i.no_of_comments == 1 %}
+                                                                    Comment
+                                                                    {% else %}
+                                                                    Comments
+                                                                    {% endif %}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                </div>
+            </div>
+          </div>
+        {% endfor %}
+    {% else %}
+
+            <div class="row justify-content-center text-center" style="margin-bottom: 100px;">
+                <div class="col-8 p-3 mb-2 bg-white text-dark white_shd full pt-4" style="height:90px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
+                      <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4z"/>
+                      <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+                    </svg><br>
+                        No Posts Yet
+                </div>
+            </div>
+
+    {% endif %}
+
+</div>
+
+
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        {% if messages %}
+            {% for i in messages %}
+                {% if i.tags == 'warning' %}
+                    <script>
+                        swal('{{i}}','','warning');
+                    </script>
+                {% elif i.tags == 'error' %}
+                    <script>
+                        swal('{{i}}','','error');
+                    </script>
+                {% elif i.tags == 'success' %}
+                    <script>
+                        swal('{{i}}','','success');
+                    </script>
+                {% else %}
+                    <script>
+                        swal('{{i}}','','info');
+                    </script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+<script>
+    $(document).ready(function() {
+        // AJAX call on like button click
+        $('.like-btn, .liked-btn').click(function(e) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            var postID = form.data('postid');
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'like_post' %}",
+                data: form.serialize(),
+                success: function(data) {
+                    console.log("Successfully liked")
+                    // Update like button text and likes count
+                    var likesCount = data.likes_count;
+                    form.find('.likes').text(likesCount + (likesCount === 1 ? ' Person Liked' : ' Likes'));
+
+                    // Toggle between like and liked buttons
+                    form.find('.like-btn').toggleClass('fa-thumbs-o-up fa-thumbs-up');
+                    form.find('.liked-btn').toggleClass('liked-btn like-btn');
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log('Error:', errorThrown);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
+{% endblock %}

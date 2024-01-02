@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-4" style="margin: -20px;">
+
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                        <h6 class="text-white text-capitalize ps-3">Posts Data table</h6>
+                    </div>
+                </div>
+
+
+                <div class="row mt-3">
+
+                    {% for p in post reversed %}
+                    <div class="col mb-3" style="display: flex; justify-content: center; align-items: center;">
+                        <div class="card-post" style="width:326px; height:326px; background-color: black;">
+                            <a class="card-image" href="{% url 'view_each_post' dataid=p.PostId %}">
+                                <img class="card-image" alt="#" src="{{ p.PImage.url }}"
+                                     style="object-fit: contain; width:100%; height:100%;">
+                            </a>
+                            <div class="hide">
+
+                                <div class="user-hidden text-center">
+                                    <img alt="#" class="img-responsive rounded-circle" height="50px"
+                                         src="{{p.UserId.DP.url}}" width="50px"/>
+                                    <p style="font-size: 1.5em; font-weight: bold;">{{p.UserId.Username}}</p>
+                                </div>
+
+                                <div class="like-hidden">
+                                    <p style="font-size: 1.5em; font-weight: bold;">{{p.no_of_likes}} <i
+                                            class="fa fa-thumbs-up"></i></p>
+                                </div>
+
+                                <div class="comment-hidden">
+                                    <p style="font-size: 1.5em; font-weight: bold;"><i class="fa fa-comment"></i>
+                                        {{p.no_of_comments}}</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if messages %}
+    {% for i in messages %}
+        {% if i.tags == 'warning' %}
+            <script>
+                swal('{{i}}','','warning');
+            </script>
+        {% elif i.tags == 'error' %}
+            <script>
+                swal('{{i}}','','error');
+            </script>
+        {% elif i.tags == 'success' %}
+            <script>
+                swal('{{i}}','','success');
+            </script>
+        {% else %}
+            <script>
+                swal('{{i}}','','info');
+            </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+</body>
+</html>
+{% endblock %}

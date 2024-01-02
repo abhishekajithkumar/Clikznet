@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        a{
+            text-decoration: none !important;
+            color: black !important;
+        }
+        .list-row:hover a{
+            color: white !important;
+        }
+
+    </style>
+</head>
+<body>
+
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+
+                        <div class="row justify-content-between">
+                            <div class="col-3">
+                                <h6 class="text-white text-capitalize ps-3">Help Center Mails</h6>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="card-body pb-2">
+                    <div class="full inner_elements margin_top_30">
+                        <div class="tab_style2">
+                            <div class="tabbar">
+
+                                <nav>
+                                    <div class="row nav nav-tabs" id="nav-tab" role="tablist">
+                                        <a aria-selected="false" class="col nav-item nav-link" data-toggle="tab"
+                                           href="#all_mail" id="nav-all-tab" role="tab"><strong>All</strong></a>
+
+                                        <a aria-selected="true" class=" col nav-item nav-link active" data-toggle="tab"
+                                           href="#waiting_mail" id="nav-ongoing-tab" role="tab"><strong>
+                                            Waiting for Response </strong></a>
+
+                                        <a aria-selected="true" class=" col nav-item nav-link" data-toggle="tab"
+                                           href="#pending_mail" id="nav-pending-tab" role="tab"><strong>
+                                            On Hold </strong></a>
+
+                                        <a aria-selected="false" class="col nav-item nav-link" data-toggle="tab"
+                                           href="#closed_mail" id="nav-closed-tab" role="tab"><strong>
+                                            Closed </strong></a>
+                                    </div>
+                                </nav>
+
+                                <div class="tab-content" id="nav-tabContent">
+
+                                    <div aria-labelledby="nav-all-tab" class="tab-pane fade" id="all_mail"
+                                         role="tabpanel">
+                                        <div class="msg_list_main">
+                                            <div>
+                                                <div class="row p-2" style="border-bottom: 1px solid grey;">
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Profile</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Name</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Email</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Issue</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Details</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Mail Status</b>
+                                                    </div>
+
+                                                    <div class="col-1">
+                                                    </div>
+
+
+                                                </div>
+
+
+                                                {% for i in mails %}
+                                                <div class="row p-2 list-row align-items-center">
+
+                                                    <div class="col">
+                                                        {% if i.UserId_id %}
+                                                        <a href="{% url 'user_profile' dataid=i.UserId_id %}">
+                                                            <img alt="user1"
+                                                                 class="avatar me-3 border-radius-lg"
+                                                                 src="{{i.UserId.DP.url}}"
+                                                                 style="height:70px; width:70px;">
+                                                            {{i.UserId.Username}}</a>
+                                                        {% else %}
+                                                        <img alt="user1"
+                                                             class="avatar me-3 border-radius-lg"
+                                                             src="{% static 'asset/img/default.jpg' %}"
+                                                             style="height:70px; width:70px;">
+                                                        User
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Name}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Email}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Issue}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Details}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        {% if i.MailStatus == 0 %}
+                                                        Waiting for Response
+                                                        {% elif i.MailStatus == 1 %}
+                                                        On Hold
+                                                        {% else %}
+                                                        Closed
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <div class="col-1">
+                                                        <a href="{% url 'help_mail_detail' dataid=i.id %}">
+                                                            <svg class="bi bi-eye-fill" fill="currentColor"
+                                                                 height="16" viewBox="0 0 16 16" width="16"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+
+
+                                                </div>
+                                                {% endfor %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div aria-labelledby="nav-ongoing-tab" class="tab-pane fade show active"
+                                         id="waiting_mail"
+                                         role="tabpanel">
+                                        <div class="msg_list_main">
+                                            <div>
+                                                <div class="row p-2" style="border-bottom: 1px solid grey;">
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Profile</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Name</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Email</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Issue</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Details</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Mail Status</b>
+                                                    </div>
+
+                                                    <div class="col-1">
+                                                    </div>
+
+
+                                                </div>
+
+
+                                                {% for i in waiting %}
+                                                <div class="row p-2 list-row align-items-center">
+
+                                                    <div class="col">
+                                                        {% if i.UserId_id %}
+                                                        <a href="{% url 'user_profile' dataid=i.UserId_id %}">
+                                                            <img alt="user1"
+                                                                 class="avatar me-3 border-radius-lg"
+                                                                 src="{{i.UserId.DP.url}}"
+                                                                 style="height:70px; width:70px;">
+                                                            {{i.UserId.Username}}</a>
+                                                        {% else %}
+                                                        <img alt="user1"
+                                                             class="avatar me-3 border-radius-lg"
+                                                             src="{% static 'asset/img/default.jpg' %}"
+                                                             style="height:70px; width:70px;">
+                                                        User
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Name}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Email}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Issue}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Details}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        {% if i.MailStatus == 0 %}
+                                                        Waiting for Response
+                                                        {% elif i.MailStatus == 1 %}
+                                                        On Hold
+                                                        {% else %}
+                                                        Closed
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <div class="col-1">
+                                                        <a href="{% url 'help_mail_detail' dataid=i.id %}">
+                                                            <svg class="bi bi-eye-fill" fill="currentColor"
+                                                                 height="16" viewBox="0 0 16 16" width="16"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+
+
+                                                </div>
+                                                {% endfor %}
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div aria-labelledby="nav-pending-tab" class="tab-pane fade" id="pending_mail"
+                                         role="tabpanel">
+                                        <div class="msg_list_main">
+                                            <div>
+                                                <div class="row p-2" style="border-bottom: 1px solid grey;">
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Profile</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Name</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Email</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Issue</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Details</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Mail Status</b>
+                                                    </div>
+
+                                                    <div class="col-1">
+                                                    </div>
+
+
+                                                </div>
+
+
+                                                {% for i in hold %}
+                                                <div class="row p-2 list-row align-items-center">
+
+                                                    <div class="col">
+                                                        {% if i.UserId_id %}
+                                                        <a href="{% url 'user_profile' dataid=i.UserId_id %}">
+                                                            <img alt="user1"
+                                                                 class="avatar me-3 border-radius-lg"
+                                                                 src="{{i.UserId.DP.url}}"
+                                                                 style="height:70px; width:70px;">
+                                                            {{i.UserId.Username}}</a>
+                                                        {% else %}
+                                                        <img alt="user1"
+                                                             class="avatar me-3 border-radius-lg"
+                                                             src="{% static 'asset/img/default.jpg' %}"
+                                                             style="height:70px; width:70px;">
+                                                        User
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Name}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Email}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Issue}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Details}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        {% if i.MailStatus == 0 %}
+                                                        Waiting for Response
+                                                        {% elif i.MailStatus == 1 %}
+                                                        On Hold
+                                                        {% else %}
+                                                        Closed
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <div class="col-1">
+                                                        <a href="{% url 'help_mail_detail' dataid=i.id %}">
+                                                            <svg class="bi bi-eye-fill" fill="currentColor"
+                                                                 height="16" viewBox="0 0 16 16" width="16"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+
+
+                                                </div>
+                                                {% endfor %}
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div aria-labelledby="nav-closed-tab" class="tab-pane fade" id="closed_mail"
+                                         role="tabpanel">
+                                        <div class="msg_list_main">
+                                            <div>
+                                                <div class="row p-2" style="border-bottom: 1px solid grey;">
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Profile</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Name</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Email</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Issue</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Details</b>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <b style="font-size:14px;">Mail Status</b>
+                                                    </div>
+
+                                                    <div class="col-1">
+                                                    </div>
+
+
+                                                </div>
+
+
+                                                {% for i in closed %}
+                                                <div class="row p-2 list-row align-items-center">
+
+                                                    <div class="col">
+                                                        {% if i.UserId_id %}
+                                                        <a href="{% url 'user_profile' dataid=i.UserId_id %}">
+                                                            <img alt="user1"
+                                                                 class="avatar me-3 border-radius-lg"
+                                                                 src="{{i.UserId.DP.url}}"
+                                                                 style="height:70px; width:70px;">
+                                                            {{i.UserId.Username}}</a>
+                                                        {% else %}
+                                                        <img alt="user1"
+                                                             class="avatar me-3 border-radius-lg"
+                                                             src="{% static 'asset/img/default.jpg' %}"
+                                                             style="height:70px; width:70px;">
+                                                        User
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Name}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Email}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Issue}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <a>{{i.Details}}</a>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        {% if i.MailStatus == 0 %}
+                                                        Waiting for Response
+                                                        {% elif i.MailStatus == 1 %}
+                                                        On Hold
+                                                        {% else %}
+                                                        Closed
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <div class="col-1">
+                                                        <a href="{% url 'help_mail_detail' dataid=i.id %}">
+                                                            <svg class="bi bi-eye-fill" fill="currentColor"
+                                                                 height="16" viewBox="0 0 16 16" width="16"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+
+
+                                                </div>
+                                                {% endfor %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+{% if messages %}
+{% for i in messages %}
+{% if i.tags == 'warning' %}
+<script>
+                swal('{{i}}','','warning');
+
+
+
+
+</script>
+{% elif i.tags == 'error' %}
+<script>
+                swal('{{i}}','','error');
+
+
+
+
+</script>
+{% elif i.tags == 'success' %}
+<script>
+                swal('{{i}}','','success');
+
+
+
+
+</script>
+{% else %}
+<script>
+                swal('{{i}}','','info');
+
+
+
+
+</script>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+</body>
+</html>
+{% endblock %}

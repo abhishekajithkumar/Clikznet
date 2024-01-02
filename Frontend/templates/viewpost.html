@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+{% extends 'timeline.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+<div style="height:20px;"></div>
+
+
+<div class="row g-0 each-post">
+    <div class="col-sm-8 col-md-8 border post-image-section p-0">
+        {% if post.PImage %}
+        <img alt="#" src="{{post.PImage.url}}">
+        {% endif %}
+
+    </div>
+    <div class="col-3 col-md-4 border pr-0">
+        <div class="scrollable_comment">
+            <div class="margin_0 border-bottom pb-2">
+
+                    <div class="row justify-content-start">
+                        <div class="col-2 p-1 ml-3">
+                            <a href="{% url 'userprofile' dataid=post.UserId_id %}">
+                            <img alt="#" class="img-responsive rounded-circle" height="50px"
+                                 src="{{post.UserId.DP.url}}" width="50px"/>
+                            </a>
+                        </div>
+                        <div class="col" style="padding-top: 10px;">
+                            {% if post.UserId_id == profile.UserId %}
+                            <a href="{% url 'my_profile' %}">
+                                <b style="color: #ff5722; font-weight: 600;">{{post.Username}}</b><br>
+                            </a>
+                            {% else %}
+                            <a href="{% url 'userprofile' dataid=post.UserId_id %}">
+                                <b style="color: #ff5722; font-weight: 600;">{{post.Username}}</b><br>
+                            </a>
+                            {% endif %}
+
+                            <i class="fa fa-clock-o" style="font-size: 12px;"> {{post.created_at}}</i>
+
+                        </div>
+                        <div class="col-2">
+                            <button class="fa fa-close btn btn-light back-btn" onclick="goBack()"></button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-light fa fa-ellipsis-v " data-bs-toggle="dropdown" aria-expanded="false">
+                                      </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="color:red;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-shield-exclamation" viewBox="0 0 16 16">
+                                              <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56"/>
+                                              <path d="M7.001 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.553.553 0 0 1-1.1 0z"/>
+                                            </svg>
+                                            Report
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel" style="color:red;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-shield-exclamation" viewBox="0 0 16 16">
+                                              <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56"/>
+                                              <path d="M7.001 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.553.553 0 0 1-1.1 0z"/>
+                                        </svg>
+                                        Report
+                                    </h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                                  </div>
+                                  <div class="modal-body">
+
+                                      <form method="post" action="{% url 'report' %}">
+                                          {% csrf_token %}
+                                          <input type="hidden" name="postid"  value="{{post.PostId}}">
+                                           <input type="hidden" name="userid" value="{{request.session.userid}}">
+                                          <textarea class="form-control" cols="5" rows="3" name="reason" placeholder="Reason.."></textarea>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Report</button>
+                                          </div>
+                                      </form>
+
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+            <div class="pb-2 pt-2 border-bottom">
+
+                {{post.Description}}<br><br>
+
+                <div class="row ">
+                <div class="col text-start fa fa-thumbs-up ml-2">
+                    {{post.no_of_likes}}
+                </div>
+                <div class="col text-end">
+                  {{post.no_of_comments}}
+                    <a class="fa fa-comment mr-2"> </a>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="border-top pt-2">
+                <div class="text-center">
+                    <div class="row mb-2">
+                        <div class="col">
+                            <form id="likeForm" data-postid="{{post.PostId}}">
+                                            {% csrf_token %}
+                                            <input name="postid" type="hidden" value="{{post.PostId}}">
+                                            {% if i.PostId in likes %}
+                                            <button class="fa fa-thumbs-up zoom liked-btn border-0"  type="button"> Like </button>
+                                            {% else %}
+                                            <button class="fa fa-thumbs-o-up zoom like-btn border-0" type="button"> Like </button>
+                                            {% endif %}
+                                            <p class="likes" style="margin-bottom: 0px;">{{ post.no_of_likes }} {% if post.no_of_likes == 1 %}Person Liked{% else %}Likes{% endif %}</p>
+                                        </form>
+
+                        </div>
+                        <div class="col">
+                            <button class="fa fa-comment-o zoom2"
+                                    style="border: none; font-weight: 900; font-size: bold;"> Comment
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div>
+                {% for cmnt in comments %}
+                <div class="row each-comment">
+                    <div class="col-3 pr-0">
+                        <img alt="#" class="img-responsive rounded-circle" height="50px" src="{{cmnt.UserId.DP.url}}"
+                             width="50px"/>
+                    </div>
+                    <div class="col" style="margin-left: -25px;">
+                        <div class="row">
+                            <div class="col">
+
+
+                        {% if cmnt.UserId_id == profile.UserId %}
+                        <a href="{% url 'my_profile' %}">
+                            <div style="font-weight: 600; color: #ff5722;">
+                                {{cmnt.UserId.Username}}
+                            </div>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'userprofile' dataid=cmnt.UserId_id %}">
+                            <div style="font-weight: 600; color: #ff5722;">
+                                {{cmnt.UserId.Username}}
+
+
+                            </div>
+                        </a>
+
+                        {% endif %}
+                                 </div>
+
+
+                            {% if cmnt.UserId_id == profile.UserId %}
+                        <div class="col-2">
+                                <form method="post" action="{% url 'delete_comment' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="commentId" value="{{cmnt.id}}">
+                                    <input type="hidden" name="postId" value="{{cmnt.PostId_id}}">
+                                    <button type="submit" style="background-color:#B2BEB5; border:none;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-trash" viewBox="0 0 16 16">
+                                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                      <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                    </svg>
+                                    </button>
+                                </form>
+
+                        </div>
+                            {% endif %}
+
+                        </div>
+
+                        {{cmnt.Comment}}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <form action="{% url 'comment' %}" method="post">
+            {% csrf_token %}
+            <input name="post_id" type="hidden" value="{{post.PostId}}">
+            <input name="user_id" type="hidden" value="{{profile.UserId}}">
+
+            <div class="input-group mb-3">
+                <input class="form-control" id="comment-input" name="comment" placeholder="Add a comment..."
+                       type="text">
+                <button class="fa fa-send btn btn-outline-secondary" type="submit"></button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
+
+<script>
+    $(document).ready(function() {
+        // AJAX call on like button click
+        $('.like-btn, .liked-btn').click(function(e) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            var postID = form.data('postid');
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'like_post' %}",
+                data: form.serialize(),
+                success: function(data) {
+                    console.log("Successfully liked")
+                    // Update like button text and likes count
+                    var likesCount = data.likes_count;
+                    form.find('.likes').text(likesCount + (likesCount === 1 ? ' Person Liked' : ' Likes'));
+
+                    // Toggle between like and liked buttons
+                    form.find('.like-btn').toggleClass('fa-thumbs-o-up fa-thumbs-up');
+                    form.find('.liked-btn').toggleClass('liked-btn like-btn');
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log('Error:', errorThrown);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
+{% endblock %}

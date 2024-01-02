@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+{% extends 'home.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+</head>
+<body>
+
+<div class="container midde_cont">
+
+<div class="row column_title">
+    <div class="col-md-12">
+        <div class="page_title">
+            <h2>Edit Profile</h2>
+        </div>
+    </div>
+</div>
+          <div class="full_container">
+         <div class="container">
+            <div class="center">
+               <div class="login_section">
+                  <div class="login_form">
+                      {% for i in data %}
+                     <form method="post" action="{% url 'update_profile' dataid=i.UserId %}" enctype="multipart/form-data">
+                         {% csrf_token %}
+                        <fieldset>
+                            <div >
+                                <img width="180" class="rounded-circle" src="{{i.DP.url}}" alt="#" />
+                                <input type="file" name="image" placeholder="image" />
+                           </div> <br>
+                            <div class="field">
+                              <label class="label_field">Full Name</label>
+                              <input type="text" name="name" placeholder="Name" value="{{i.Name}}"/>
+                           </div>
+                            <div class="field">
+                              <label class="label_field">Username</label>
+                              <input type="text" name="username" placeholder="Username" value="{{i.Username}}" />
+                           </div>
+                           <div class="field">
+                              <label class="label_field">Email Address</label>
+                              <input type="email" name="email" placeholder="E-mail" value="{{i.Email}}" />
+                           </div>
+
+
+                           <div class="field margin_0">
+                              <label class="label_field hidden">hidden label</label>
+                              <button type="submit" class="main_bt">Update</button>
+                           </div>
+                        </fieldset>
+                     </form>
+                      {% endfor %}
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if messages %}
+{% for i in messages %}
+{% if i.tags == 'warning' %}
+<script>
+                        swal('{{i}}','','warning');
+
+
+
+
+
+</script>
+{% elif i.tags == 'error' %}
+<script>
+                        swal('{{i}}','','error');
+
+
+
+
+
+</script>
+{% elif i.tags == 'success' %}
+<script>
+                        swal('{{i}}','','success');
+
+
+
+
+
+</script>
+{% else %}
+<script>
+                        swal('{{i}}','','info');
+
+
+
+
+
+</script>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+</body>
+</html>
+{% endblock %}

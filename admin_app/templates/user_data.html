@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Data</title>
+    <style>
+        a{
+            text-decoration: none !important;
+            color: black !important;
+        }
+        .list-row:hover a{
+            color: white !important;
+        }
+
+    </style>
+</head>
+<body>
+
+
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+
+                      <div  class="row justify-content-between p-2">
+                          <div class="col">
+                          <input id="myInput" onkeyup="myFunction()" placeholder="Search by Username.." title="Type in a username" type="text">
+                        </div>
+                        <div class="col-8">
+                          <h6 class="text-white text-capitalize ps-3">User Data table</h6>
+                        </div>
+
+                      </div>
+
+                    </div>
+                </div>
+                <div class="card-body pb-2">
+                    <div>
+
+                        <div class="row p-2" style="border-bottom: 1px solid grey;">
+
+                                    <div class="col-1">
+                                        <b style="font-size:14px;">DP</b>
+                                    </div>
+
+                                    <div class="col-2">
+                                        <b style="font-size:14px;">Username</b>
+                                    </div>
+
+                                    <div class="col-2">
+                                        <b style="font-size:14px;">Name</b>
+                                    </div>
+
+                                    <div class="col-3">
+                                        <b style="font-size:14px;">Email</b>
+                                    </div>
+
+                                    <div class="col-2">
+                                        <b style="font-size:14px;">Account Created On</b>
+                                    </div>
+
+                                    <div class="col-1">
+                                        <b style="font-size:14px;">Status</b>
+                                    </div>
+
+                                    <div class="col-1">
+                                        <b style="font-size:14px;">Remove</b>
+                                    </div>
+                        </div>
+
+                        <ul id="myUL" style="list-style-type: none; padding-left:0;">
+
+                            {% for i in data %}
+
+                            <li class="list-row" >
+                                <div class="row p-2">
+
+                                    <div class="col-1">
+                                        <img alt="user1" class="avatar avatar-sm me-3 border-radius-lg"
+                                             src="{{i.DP.url}}">
+                                    </div>
+
+                                    <div class="col-2">
+                                        <a href="{% url 'user_profile' dataid=i.UserId %}">{{i.Username}}</a>
+                                    </div>
+
+                                    <div class="col-2">
+                                        <a href="{% url 'user_profile' dataid=i.UserId %}">{{i.Name}}</a>
+                                    </div>
+
+                                    <div class="col-3">
+                                        {{i.Email}}
+                                    </div>
+
+                                    <div class="col-2">
+                                        {{i.Account_created}}
+                                    </div>
+
+                                    <div class="col-1">
+                                        {% if i.Status == 0 %}
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-record-fill status-colour" viewBox="0 0 16 16">
+                                              <path fill-rule="evenodd" d="M8 13A5 5 0 1 0 8 3a5 5 0 0 0 0 10"/>
+                                            </svg><a style="color:green;">Active</a>
+                                        {% else %}
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-record-fill" viewBox="0 0 16 16">
+                                              <path fill-rule="evenodd" d="M8 13A5 5 0 1 0 8 3a5 5 0 0 0 0 10"/>
+                                            </svg><a style="color:red;">Inactive</a>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="col-1">
+                                        <a class="font-weight-bold text-xs delete-user" href="{% url 'remove_user' dataid=i.UserId %}">
+                                            Remove
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-x-fill" viewBox="0 0 16 16">
+                                              <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </li>
+
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    document.querySelectorAll('.delete-user').forEach(button => {
+    button.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default action (i.e., following the link)
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Remove User"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If confirmed, proceed with the deletion by following the link
+                window.location.href = button.getAttribute('href');
+            }
+        });
+    });
+});
+</script>
+
+{% if messages %}
+    {% for i in messages %}
+        {% if i.tags == 'warning' %}
+            <script>
+                swal('{{i}}','','warning');
+            </script>
+        {% elif i.tags == 'error' %}
+            <script>
+                swal('{{i}}','','error');
+            </script>
+        {% elif i.tags == 'success' %}
+            <script>
+                swal('{{i}}','','success');
+            </script>
+        {% else %}
+            <script>
+                swal('{{i}}','','info');
+            </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<script>
+function myFunction() {
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName("li");
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        console.log("Filter:", filter);
+        console.log("Text Value:", txtValue);
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+}
+</script>
+
+</body>
+</html>
+{% endblock %}
